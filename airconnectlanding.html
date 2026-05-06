@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirConnect | Private Aviation, Simplified</title>
+  <meta name="description" content="AirConnect connects student pilots, certified flight instructors, and aircraft owners in one seamless marketplace. Download on the App Store.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --midnight: #0a0e17;
+      --charcoal: #13171f;
+      --graphite: #1c2029;
+      --steel: #2a2f3a;
+      --muted: #6b7280;
+      --silver: #9ca3af;
+      --pearl: #d1d5db;
+      --cream: #f5f0e8;
+      --white: #fafaf8;
+      --sky: #0ea5e9;
+      --sky-muted: rgba(14, 165, 233, 0.15);
+      --gold: #c9a96e;
+      --gold-muted: rgba(201, 169, 110, 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Avenir', 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--midnight);
+      color: var(--pearl);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ═══════════════════════════════════════════
+       UTILITY
+    ═══════════════════════════════════════════ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 0;
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+    .nav-logo span {
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+      transition: color 0.3s;
+      font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 0.75rem !important;
+      letter-spacing: 0.12em !important;
+      padding: 0.6rem 1.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold) !important;
+      transition: background 0.3s, color 0.3s !important;
+    }
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--midnight) !important;
+    }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--pearl);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201, 169, 110, 0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(14, 165, 233, 0.03) 0%, transparent 60%);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--midnight), transparent);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+    .hero-label {
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--silver);
+      max-width: 520px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 1s 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2rem;
+      background: var(--white);
+      color: var(--midnight);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-family: inherit;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+    }
+    .btn-primary svg { width: 18px; height: 18px; }
+    .btn-secondary {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--silver);
+      font-weight: 500;
+      transition: color 0.3s;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-secondary:hover { color: var(--white); }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      margin: 0 auto;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ═══════════════════════════════════════════
+       DIVIDER
+    ═══════════════════════════════════════════ */
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto;
+      opacity: 0.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       INTRO SECTION
+    ═══════════════════════════════════════════ */
+    .intro {
+      padding: 8rem 0;
+      text-align: center;
+    }
+    .intro .label { margin-bottom: 1.5rem; }
+    .intro h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.2;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .intro p {
+      font-size: 1rem;
+      color: var(--silver);
+      max-width: 540px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    /* ═══════════════════════════════════════════
+       ROLES / THREE COLUMNS
+    ═══════════════════════════════════════════ */
+    .roles {
+      padding: 4rem 0 8rem;
+    }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201, 169, 110, 0.08);
+      border: 1px solid rgba(201, 169, 110, 0.08);
+    }
+    .role-card {
+      background: var(--charcoal);
+      padding: 3.5rem 2.5rem;
+      transition: background 0.5s;
+    }
+    .role-card:hover {
+      background: var(--graphite);
+    }
+    .role-number {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+    .role-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .role-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+    .role-card h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: 0.01em;
+    }
+    .role-card p {
+      font-size: 0.9rem;
+      color: var(--silver);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════
+       FEATURES STRIP
+    ═══════════════════════════════════════════ */
+    .features {
+      padding: 6rem 0;
+      border-top: 1px solid rgba(201, 169, 110, 0.06);
+      border-bottom: 1px solid rgba(201, 169, 110, 0.06);
+    }
+    .features-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    .features-header .label { margin-bottom: 1.5rem; }
+    .features-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .feature-item {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .feature-dot {
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      margin-top: 0.5rem;
+    }
+    .feature-item h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .feature-item p {
+      font-size: 0.85rem;
+      color: var(--silver);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════
+       STATS BAR
+    ═══════════════════════════════════════════ */
+    .stats {
+      padding: 5rem 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+      gap: 2rem;
+    }
+    .stat-item h3 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 200;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .stat-item p {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════
+       CTA / DOWNLOAD
+    ═══════════════════════════════════════════ */
+    .cta {
+      padding: 8rem 0;
+      text-align: center;
+      position: relative;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .cta .label { margin-bottom: 1.5rem; }
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    .cta > .cta-inner > p {
+      font-size: 1rem;
+      color: var(--silver);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* App Store badge styled button */
+    .app-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 2rem;
+      background: var(--white);
+      color: var(--midnight);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+    .app-store-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+    }
+    .app-store-btn svg { width: 22px; height: 22px; }
+    .app-store-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .app-store-text small {
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .app-store-text strong {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid rgba(201, 169, 110, 0.06);
+    }
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-left {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .footer-center a {
+      font-size: 0.78rem;
+      color: var(--silver);
+      letter-spacing: 0.06em;
+      transition: color 0.3s;
+    }
+    .footer-center a:hover { color: var(--white); }
+    .footer-right {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: translateX(-50%) scaleY(1); }
+      50%      { opacity: 0.8; transform: translateX(-50%) scaleY(1.15); }
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+      .features-list {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+      }
+    }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(10, 14, 23, 0.97);
+        backdrop-filter: blur(20px);
+        padding: 2rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+      }
+      .nav-toggle { display: flex; }
+      .hero h1 { font-size: 2.4rem; }
+      .hero-actions { flex-direction: column; }
+      .role-card { padding: 2.5rem 2rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      footer .container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ NAV ═══════ -->
+  <nav id="nav">
+    <div class="container">
+      <div class="nav-logo">AIR<span>CONNECT</span></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#roles">Who It's For</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#download" class="nav-cta">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="label hero-label">Private Aviation Marketplace</p>
+      <h1>The sky is no longer<br>the <em>limit</em></h1>
+      <p>AirConnect brings student pilots, certified flight instructors, and aircraft owners together in one refined marketplace, built for those who demand simplicity.</p>
+      <div class="hero-actions">
+        <a href="#download" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.99 2.97 12.5 4.7 9.49C5.55 8 7.13 7.04 8.82 7.02C10.1 7 11.32 7.88 12.11 7.88C12.89 7.88 14.37 6.82 15.92 7C16.57 7.03 18.39 7.27 19.56 8.94C19.47 8.99 17.09 10.35 17.12 13.18C17.15 16.58 20.09 17.73 20.12 17.74C20.09 17.81 19.68 19.26 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
+          Download on App Store
+        </a>
+        <a href="#about" class="btn-secondary">Learn more ↓</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══════ INTRO ═══════ -->
+  <section class="intro" id="about">
+    <div class="container fade-in">
+      <p class="label">The Platform</p>
+      <h2>Aviation's first three-sided marketplace</h2>
+      <p>AirConnect eliminates the friction of flight training logistics. Browse aircraft, find your instructor, and book your next lesson. All from a single, intuitive interface designed for the modern pilot.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════ ROLES ═══════ -->
+  <section class="roles" id="roles">
+    <div class="container">
+      <div class="roles-grid fade-in">
+        <div class="role-card">
+          <p class="role-number">01</p>
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path d="M12 14l9-5-9-5-9 5 9 5zm0 0v6.5"/></svg>
+          </div>
+          <h3>Student Pilots</h3>
+          <p>Find certified instructors and available aircraft to complete your training. Browse by location, aircraft type, and instructor ratings, then book with a single tap.</p>
+        </div>
+        <div class="role-card">
+          <p class="role-number">02</p>
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <h3>Flight Instructors</h3>
+          <p>Expand your student base and find aircraft to instruct from. Set your availability, manage your schedule, and let students come to you. All through one streamlined platform.</p>
+        </div>
+        <div class="role-card">
+          <p class="role-number">03</p>
+          <div class="role-icon">
+            <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+          </div>
+          <h3>Aircraft Owners</h3>
+          <p>Monetize your aircraft by connecting with vetted pilots and instructors. Approve or deny rental requests, manage your fleet calendar, and generate revenue on your terms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FEATURES ═══════ -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header fade-in">
+        <p class="label">Capabilities</p>
+        <h2>Designed with intention</h2>
+      </div>
+      <div class="features-list fade-in">
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Smart Scheduling</h4>
+            <p>Coordinate aircraft availability, instructor schedules, and student bookings in a unified calendar system.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Fleet Management</h4>
+            <p>Aircraft owners can manage multiple aircraft, review rental requests, and assign approved instructors per booking.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Verified Profiles</h4>
+            <p>Every user is verified with certificates, ratings, and citizenship documentation for complete peace of mind.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Location-Aware</h4>
+            <p>Discover aircraft and instructors near you. Browse by airport, distance, and aircraft type to find your ideal match.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Real-Time Notifications</h4>
+            <p>Instant updates on booking approvals, schedule changes, and new opportunities. Nothing falls through the cracks.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Built for iOS</h4>
+            <p>A native iOS experience designed with the same precision you expect from your instruments. Clean, fast, and intuitive.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STATS ═══════ -->
+  <section class="stats">
+    <div class="container fade-in">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>3</h3>
+          <p>User Roles</p>
+        </div>
+        <div class="stat-item">
+          <h3>1</h3>
+          <p>Unified Platform</p>
+        </div>
+        <div class="stat-item">
+          <h3>0</h3>
+          <p>Friction</p>
+        </div>
+        <div class="stat-item">
+          <h3>∞</h3>
+          <p>Altitude</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ CTA ═══════ -->
+  <section class="cta" id="download">
+    <div class="cta-inner container fade-in">
+      <p class="label">Get Started</p>
+      <h2>Ready for takeoff?</h2>
+      <p>Download AirConnect and join the future of private aviation training. Available now on the App Store.</p>
+      <a href="https://apps.apple.com" class="app-store-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.99 2.97 12.5 4.7 9.49C5.55 8 7.13 7.04 8.82 7.02C10.1 7 11.32 7.88 12.11 7.88C12.89 7.88 14.37 6.82 15.92 7C16.57 7.03 18.39 7.27 19.56 8.94C19.47 8.99 17.09 10.35 17.12 13.18C17.15 16.58 20.09 17.73 20.12 17.74C20.09 17.81 19.68 19.26 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
+        <div class="app-store-text">
+          <small>Download on the</small>
+          <strong>App Store</strong>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-left">&copy; 2026 AirConnect</div>
+      <div class="footer-center">
+        <a href="tel:6787405901">(678) 740-5901</a>
+      </div>
+      <div class="footer-right">
+        <a href="https://www.airconnectapp.com">airconnectapp.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════ SCRIPTS ═══════ -->
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Intersection observer for fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
