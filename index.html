@@ -754,6 +754,38 @@
     </div>
   </section>
 
+  <!-- ═══════ WAITLIST ═══════ -->
+  <section class="waitlist" id="waitlist">
+    <div class="container fade-in">
+      <div class="waitlist-inner">
+        <p class="label">Early Access</p>
+        <h2>Be first to take off</h2>
+        <p>AirConnect is launching soon. Join the waitlist and we'll reach out when we're ready for you.</p>
+        <form class="waitlist-form" id="waitlistForm" novalidate>
+          <input
+            class="waitlist-input"
+            type="email"
+            id="waitlistEmail"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+          >
+          <select class="waitlist-select" id="waitlistType" required>
+            <option value="" disabled selected>I am a...</option>
+            <option value="student">Learning to Fly</option>
+            <option value="instructor">Flight Instructor</option>
+            <option value="owner">Aircraft Owner</option>
+            <option value="manager">Aircraft Manager</option>
+          </select>
+          <button class="waitlist-submit" type="submit" id="waitlistSubmit">
+            Join the Waitlist
+          </button>
+          <p class="waitlist-message" id="waitlistMessage"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════ INTRO ═══════ -->
   <section class="intro" id="about">
     <div class="container fade-in">
@@ -822,13 +854,6 @@
         <div class="feature-item">
           <div class="feature-dot"></div>
           <div>
-            <h4>Verified Profiles</h4>
-            <p>Every user is verified with certificates, ratings, and citizenship documentation for complete peace of mind.</p>
-          </div>
-        </div>
-        <div class="feature-item">
-          <div class="feature-dot"></div>
-          <div>
             <h4>Location-Aware</h4>
             <p>Discover aircraft and instructors near you. Browse by airport, distance, and aircraft type to find your ideal match.</p>
           </div>
@@ -871,38 +896,6 @@
           <h3>∞</h3>
           <p>Altitude</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════ WAITLIST ═══════ -->
-  <section class="waitlist" id="waitlist">
-    <div class="container fade-in">
-      <div class="waitlist-inner">
-        <p class="label">Early Access</p>
-        <h2>Be first to take off</h2>
-        <p>AirConnect is launching soon. Join the waitlist and we'll reach out when we're ready for you.</p>
-        <form class="waitlist-form" id="waitlistForm" novalidate>
-          <input
-            class="waitlist-input"
-            type="email"
-            id="waitlistEmail"
-            placeholder="your@email.com"
-            required
-            autocomplete="email"
-          >
-          <select class="waitlist-select" id="waitlistType" required>
-            <option value="" disabled selected>I am a...</option>
-            <option value="student">Student Pilot</option>
-            <option value="instructor">Flight Instructor</option>
-            <option value="owner">Aircraft Owner</option>
-            <option value="manager">Aircraft Manager</option>
-          </select>
-          <button class="waitlist-submit" type="submit" id="waitlistSubmit">
-            Join the Waitlist
-          </button>
-          <p class="waitlist-message" id="waitlistMessage"></p>
-        </form>
       </div>
     </div>
   </section>
