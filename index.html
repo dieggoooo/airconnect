@@ -518,6 +518,123 @@
     }
 
     /* ═══════════════════════════════════════════
+       WAITLIST
+    ═══════════════════════════════════════════ */
+    .waitlist {
+      padding: 8rem 0;
+      text-align: center;
+      position: relative;
+      border-top: 1px solid rgba(201, 169, 110, 0.06);
+    }
+    .waitlist::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+    }
+    .waitlist-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .waitlist .label { margin-bottom: 1.5rem; }
+    .waitlist h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .waitlist-inner > p {
+      font-size: 1rem;
+      color: var(--silver);
+      max-width: 460px;
+      margin: 0 auto 0;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      max-width: 440px;
+      margin: 1rem auto 0;
+    }
+    .waitlist-row {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+    }
+    .waitlist-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--graphite);
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      color: var(--white);
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.85rem 1.1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      letter-spacing: 0.02em;
+    }
+    .waitlist-input::placeholder { color: var(--muted); }
+    .waitlist-input:focus { border-color: rgba(201, 169, 110, 0.5); }
+    .waitlist-select {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--graphite);
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      color: var(--silver);
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0.85rem 1.1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+    .waitlist-select:focus { border-color: rgba(201, 169, 110, 0.5); }
+    .waitlist-select option { background: var(--charcoal); }
+    .waitlist-submit {
+      width: 100%;
+      padding: 0.9rem 2rem;
+      background: var(--white);
+      color: var(--midnight);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+      font-family: inherit;
+    }
+    .waitlist-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+    }
+    .waitlist-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .waitlist-message {
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      margin-top: 0.25rem;
+      min-height: 1.2em;
+    }
+    .waitlist-message.success { color: #4ade80; }
+    .waitlist-message.error { color: #f87171; }
+
+    /* ═══════════════════════════════════════════
        FOOTER
     ═══════════════════════════════════════════ */
     footer {
@@ -617,6 +734,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#roles">Who It's For</a></li>
         <li><a href="#features">Features</a></li>
+        <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
       </ul>
     </div>
   </nav>
@@ -757,6 +875,38 @@
     </div>
   </section>
 
+  <!-- ═══════ WAITLIST ═══════ -->
+  <section class="waitlist" id="waitlist">
+    <div class="container fade-in">
+      <div class="waitlist-inner">
+        <p class="label">Early Access</p>
+        <h2>Be first to take off</h2>
+        <p>AirConnect is launching soon. Join the waitlist and we'll reach out when we're ready for you.</p>
+        <form class="waitlist-form" id="waitlistForm" novalidate>
+          <input
+            class="waitlist-input"
+            type="email"
+            id="waitlistEmail"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+          >
+          <select class="waitlist-select" id="waitlistType" required>
+            <option value="" disabled selected>I am a...</option>
+            <option value="student">Student Pilot</option>
+            <option value="instructor">Flight Instructor</option>
+            <option value="owner">Aircraft Owner</option>
+            <option value="manager">Aircraft Manager</option>
+          </select>
+          <button class="waitlist-submit" type="submit" id="waitlistSubmit">
+            Join the Waitlist
+          </button>
+          <p class="waitlist-message" id="waitlistMessage"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════ FOOTER ═══════ -->
   <footer>
     <div class="container">
@@ -798,6 +948,64 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Waitlist form
+    const SUPABASE_URL = 'https://yxefrbnjvpdodpbikuto.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWZyYm5qdnBkb2RwYmlrdXRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4MjE2OTgsImV4cCI6MjA5MTM5NzY5OH0.8Jc0tmTwrLfBPvgR6hNwu_BRcm1QeoUv8WAgn5IlHg0';
+
+    document.getElementById('waitlistForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('waitlistEmail').value.trim();
+      const userType = document.getElementById('waitlistType').value;
+      const submitBtn = document.getElementById('waitlistSubmit');
+      const msg = document.getElementById('waitlistMessage');
+
+      if (!email || !userType) {
+        msg.textContent = 'Please fill in all fields.';
+        msg.className = 'waitlist-message error';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Joining...';
+      msg.textContent = '';
+      msg.className = 'waitlist-message';
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ email, user_type: userType }),
+        });
+
+        if (res.status === 201 || res.ok) {
+          msg.textContent = 'You\'re on the list. We\'ll be in touch.';
+          msg.className = 'waitlist-message success';
+          e.target.reset();
+          submitBtn.textContent = 'You\'re In';
+        } else {
+          const data = await res.json().catch(() => ({}));
+          if (data.code === '23505') {
+            msg.textContent = 'That email is already on the list.';
+          } else {
+            msg.textContent = 'Something went wrong. Try again.';
+          }
+          msg.className = 'waitlist-message error';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Join the Waitlist';
+        }
+      } catch {
+        msg.textContent = 'Network error. Please try again.';
+        msg.className = 'waitlist-message error';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Join the Waitlist';
+      }
+    });
   </script>
 
 </body>
