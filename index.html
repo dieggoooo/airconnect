@@ -521,33 +521,71 @@
        WAITLIST
     ═══════════════════════════════════════════ */
     .waitlist {
-      padding: 8rem 0;
-      text-align: center;
       position: relative;
-      border-top: 1px solid rgba(201, 169, 110, 0.06);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
     }
+    /* horizon glow */
     .waitlist::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201, 169, 110, 0.04) 0%, transparent 70%);
+      bottom: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140%;
+      height: 55%;
+      background: radial-gradient(ellipse 70% 60% at 50% 100%,
+        rgba(201, 169, 110, 0.18) 0%,
+        rgba(14, 165, 233, 0.06) 45%,
+        transparent 70%);
+      pointer-events: none;
+    }
+    /* horizon arc line */
+    .waitlist::after {
+      content: '';
+      position: absolute;
+      bottom: 18%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 2px;
+      background: linear-gradient(to right,
+        transparent 0%,
+        rgba(201, 169, 110, 0.25) 25%,
+        rgba(201, 169, 110, 0.5) 50%,
+        rgba(201, 169, 110, 0.25) 75%,
+        transparent 100%);
+      border-radius: 50%;
+      filter: blur(1px);
+      pointer-events: none;
     }
     .waitlist-inner {
       position: relative;
       z-index: 1;
+      max-width: 820px;
+      padding: 0 2rem;
     }
-    .waitlist .label { margin-bottom: 1.5rem; }
+    .waitlist .label { margin-bottom: 2rem; }
     .waitlist h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(3rem, 7vw, 5.5rem);
       font-weight: 300;
       color: var(--white);
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
+      margin-bottom: 0.2em;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .waitlist h2 em {
+      font-style: italic;
+      color: var(--gold);
     }
     .waitlist-inner > p {
       font-size: 1rem;
       color: var(--silver);
-      max-width: 460px;
+      max-width: 420px;
       margin: 0 auto 0;
       font-weight: 300;
       line-height: 1.7;
@@ -556,42 +594,68 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
-      max-width: 440px;
-      margin: 1rem auto 0;
-    }
-    .waitlist-row {
-      display: flex;
       gap: 0.75rem;
+      max-width: 520px;
+      margin: 2.5rem auto 0;
+    }
+    .waitlist-inline {
+      display: flex;
       width: 100%;
+      gap: 0;
     }
     .waitlist-input {
-      width: 100%;
+      flex: 1;
+      min-width: 0;
       box-sizing: border-box;
-      background: var(--graphite);
-      border: 1px solid rgba(201, 169, 110, 0.15);
+      background: rgba(28, 32, 41, 0.8);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      border-right: none;
       color: var(--white);
       font-family: inherit;
       font-size: 0.85rem;
-      padding: 0.85rem 1.1rem;
+      padding: 1rem 1.2rem;
       outline: none;
       transition: border-color 0.3s;
       letter-spacing: 0.02em;
+      backdrop-filter: blur(8px);
     }
     .waitlist-input::placeholder { color: var(--muted); }
     .waitlist-input:focus { border-color: rgba(201, 169, 110, 0.5); }
+    .waitlist-submit {
+      flex-shrink: 0;
+      padding: 1rem 2rem;
+      background: var(--white);
+      color: var(--midnight);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .waitlist-submit:hover:not(:disabled) {
+      background: var(--cream);
+      box-shadow: 0 8px 30px rgba(201, 169, 110, 0.2);
+    }
+    .waitlist-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .waitlist-select {
       width: 100%;
       box-sizing: border-box;
-      background: var(--graphite);
-      border: 1px solid rgba(201, 169, 110, 0.15);
-      color: var(--silver);
+      background: rgba(28, 32, 41, 0.6);
+      border: 1px solid rgba(201, 169, 110, 0.12);
+      color: var(--muted);
       font-family: inherit;
-      font-size: 0.82rem;
-      padding: 0.85rem 1.1rem;
+      font-size: 0.78rem;
+      padding: 0.75rem 1.2rem;
       outline: none;
       transition: border-color 0.3s;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
       appearance: none;
@@ -600,35 +664,13 @@
       background-repeat: no-repeat;
       background-position: right 1rem center;
       padding-right: 2.5rem;
+      backdrop-filter: blur(8px);
     }
-    .waitlist-select:focus { border-color: rgba(201, 169, 110, 0.5); }
+    .waitlist-select:focus { border-color: rgba(201, 169, 110, 0.4); }
     .waitlist-select option { background: var(--charcoal); }
-    .waitlist-submit {
-      width: 100%;
-      padding: 0.9rem 2rem;
-      background: var(--white);
-      color: var(--midnight);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-      font-family: inherit;
-    }
-    .waitlist-submit:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
-    }
-    .waitlist-submit:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
     .waitlist-message {
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      margin-top: 0.25rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
       min-height: 1.2em;
     }
     .waitlist-message.success { color: var(--gold); }
@@ -734,7 +776,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#roles">Who It's For</a></li>
         <li><a href="#features">Features</a></li>
-        <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
+        <li><a href="#hero" class="nav-cta">Join Waitlist</a></li>
       </ul>
     </div>
   </nav>
@@ -745,44 +787,32 @@
       <p class="label hero-label">Private Aviation Marketplace</p>
       <h1>The sky is no longer<br>the <em>limit</em></h1>
       <p>AirConnect brings student pilots, certified flight instructors, and aircraft owners together in one refined marketplace, built for those who demand simplicity.</p>
-      <div class="hero-actions">
-        <a href="#about" class="btn-primary">Learn more ↓</a>
-      </div>
-    </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- ═══════ WAITLIST ═══════ -->
-  <section class="waitlist" id="waitlist">
-    <div class="container fade-in">
-      <div class="waitlist-inner">
-        <p class="label">Early Access</p>
-        <h2>Be first to take off</h2>
-        <p>AirConnect is launching soon. Join the waitlist and we'll reach out when we're ready for you.</p>
-        <form class="waitlist-form" id="waitlistForm" novalidate>
+      <form class="waitlist-form" id="waitlistForm" novalidate>
+        <div class="waitlist-inline">
           <input
             class="waitlist-input"
             type="email"
             id="waitlistEmail"
-            placeholder="your@email.com"
+            placeholder="Your email address"
             required
             autocomplete="email"
           >
-          <select class="waitlist-select" id="waitlistType" required>
-            <option value="" disabled selected>I am a...</option>
-            <option value="student">Learning to Fly</option>
-            <option value="instructor">Flight Instructor</option>
-            <option value="owner">Aircraft Owner</option>
-            <option value="manager">Aircraft Manager</option>
-          </select>
           <button class="waitlist-submit" type="submit" id="waitlistSubmit">
-            Join the Waitlist
+            Join Waitlist
           </button>
-          <p class="waitlist-message" id="waitlistMessage"></p>
-        </form>
-      </div>
+        </div>
+        <select class="waitlist-select" id="waitlistType" required>
+          <option value="" disabled selected>I am a...</option>
+          <option value="student">Learning to Fly</option>
+          <option value="instructor">Flight Instructor</option>
+          <option value="owner">Aircraft Owner</option>
+          <option value="manager">Aircraft Manager</option>
+        </select>
+        <p class="waitlist-message" id="waitlistMessage"></p>
+      </form>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
     </div>
   </section>
 
