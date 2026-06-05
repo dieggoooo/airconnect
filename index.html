@@ -644,30 +644,79 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-    .waitlist-select {
+    .custom-select {
+      position: relative;
+      z-index: 10;
       width: 100%;
       box-sizing: border-box;
+      user-select: none;
+    }
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background: rgba(28, 32, 41, 0.6);
       border: 1px solid rgba(201, 169, 110, 0.12);
       color: var(--muted);
       font-family: inherit;
       font-size: 0.78rem;
       padding: 0.75rem 1.2rem;
-      outline: none;
-      transition: border-color 0.3s;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
+      transition: border-color 0.3s;
       backdrop-filter: blur(8px);
     }
-    .waitlist-select:focus { border-color: rgba(201, 169, 110, 0.4); }
-    .waitlist-select option { background: var(--charcoal); }
+    .custom-select.open .custom-select-trigger {
+      border-color: rgba(201, 169, 110, 0.4);
+    }
+    .custom-select-trigger.selected { color: var(--pearl); }
+    .custom-select-arrow {
+      width: 10px;
+      height: 10px;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg) translateY(-3px);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+      margin-left: 0.75rem;
+    }
+    .custom-select.open .custom-select-arrow {
+      transform: rotate(-135deg) translateY(-3px);
+    }
+    .custom-select-options {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: var(--charcoal);
+      border: 1px solid rgba(201, 169, 110, 0.15);
+      z-index: 50;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.2s ease;
+    }
+    .custom-select.open .custom-select-options {
+      max-height: 240px;
+      opacity: 1;
+    }
+    .custom-select-option {
+      padding: 0.75rem 1.2rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--silver);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .custom-select-option:hover {
+      background: rgba(201, 169, 110, 0.08);
+      color: var(--white);
+    }
+    .custom-select-option.active {
+      color: var(--gold);
+    }
     .waitlist-message {
       font-size: 0.78rem;
       letter-spacing: 0.08em;
@@ -801,18 +850,21 @@
             Join Waitlist
           </button>
         </div>
-        <select class="waitlist-select" id="waitlistType" required>
-          <option value="" disabled selected>I am a...</option>
-          <option value="student">Student</option>
-          <option value="instructor">Flight Instructor</option>
-          <option value="owner">Aircraft Owner</option>
-          <option value="manager">Aircraft Manager</option>
-        </select>
+        <input type="hidden" id="waitlistType">
+        <div class="custom-select" id="customSelect">
+          <div class="custom-select-trigger" id="customSelectTrigger">
+            <span id="customSelectLabel">I am a...</span>
+            <span class="custom-select-arrow"></span>
+          </div>
+          <div class="custom-select-options">
+            <div class="custom-select-option" data-value="student">Student</div>
+            <div class="custom-select-option" data-value="instructor">Flight Instructor</div>
+            <div class="custom-select-option" data-value="owner">Aircraft Owner</div>
+            <div class="custom-select-option" data-value="manager">Aircraft Manager</div>
+          </div>
+        </div>
         <p class="waitlist-message" id="waitlistMessage"></p>
       </form>
-    </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
     </div>
   </section>
 
@@ -971,6 +1023,36 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Custom dropdown
+    const customSelect = document.getElementById('customSelect');
+    const customSelectTrigger = document.getElementById('customSelectTrigger');
+    const customSelectLabel = document.getElementById('customSelectLabel');
+    const waitlistTypeInput = document.getElementById('waitlistType');
+
+    customSelectTrigger.addEventListener('click', () => {
+      customSelect.classList.toggle('open');
+    });
+
+    customSelect.querySelectorAll('.custom-select-option').forEach(option => {
+      option.addEventListener('click', () => {
+        customSelect.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
+        option.classList.add('active');
+        customSelectLabel.textContent = option.textContent;
+        customSelectTrigger.classList.add('selected');
+        waitlistTypeInput.value = option.dataset.value;
+        customSelect.classList.remove('open');
+      });
+    });
+
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    document.addEventListener('click', (e) => {
+      if (!customSelect.contains(e.target)) customSelect.classList.remove('open');
+    });
+    customSelectTrigger.addEventListener('click', () => {
+      const isOpen = customSelect.classList.contains('open');
+      if (scrollIndicator) scrollIndicator.style.opacity = isOpen ? '' : '0';
+    });
 
     // Waitlist form
     const SUPABASE_URL = 'https://yxefrbnjvpdodpbikuto.supabase.co';
