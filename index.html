@@ -603,12 +603,10 @@
       gap: 0;
     }
     .waitlist-input {
-      flex: 1;
-      min-width: 0;
+      width: 100%;
       box-sizing: border-box;
       background: rgba(28, 32, 41, 0.8);
       border: 1px solid rgba(201, 169, 110, 0.2);
-      border-right: none;
       color: var(--white);
       font-family: inherit;
       font-size: 0.85rem;
@@ -617,6 +615,11 @@
       transition: border-color 0.3s;
       letter-spacing: 0.02em;
       backdrop-filter: blur(8px);
+    }
+    .waitlist-inline .waitlist-input {
+      flex: 1;
+      min-width: 0;
+      border-right: none;
     }
     .waitlist-input::placeholder { color: var(--muted); }
     .waitlist-input:focus { border-color: rgba(201, 169, 110, 0.5); }
@@ -832,9 +835,9 @@
   <!-- ═══════ HERO ═══════ -->
   <section class="hero" id="hero">
     <div class="hero-content">
-      <p class="label hero-label">Private Aviation Marketplace</p>
-      <h1>The sky is no longer<br>the <em>limit</em></h1>
-      <p>AirConnect brings student pilots, certified flight instructors, and aircraft owners together in one refined marketplace, built for those who demand simplicity.</p>
+      <p class="label hero-label">THE SKY IS NO LONGER THE LIMIT</p>
+      <h1>General Aviation<br><em>Marketplace</em></h1>
+      <p>Simplifying the connection and access in the pursuit of aviation.</p>
       <form class="waitlist-form" id="waitlistForm" novalidate>
         <div class="waitlist-inline">
           <input
@@ -849,6 +852,13 @@
             Join Waitlist
           </button>
         </div>
+        <input
+          class="waitlist-input"
+          type="text"
+          id="waitlistLocation"
+          placeholder="City, state or airport (e.g. Atlanta, GA or KATL)"
+          autocomplete="off"
+        >
         <input type="hidden" id="waitlistType">
         <div class="custom-select" id="customSelect">
           <div class="custom-select-trigger" id="customSelectTrigger">
@@ -873,7 +883,7 @@
     <div class="container fade-in">
       <p class="label">The Platform</p>
       <h2>Aviation's first three-sided marketplace</h2>
-      <p>AirConnect eliminates the friction of flight training logistics. Browse aircraft, find your instructor, and book your next lesson. All from a single, intuitive interface designed for the modern pilot.</p>
+      <p>AirConnect brings all three together: a student, an instructor, and an aircraft. Connect, schedule, and fly, all from a single, intuitive interface built for every side of flight training.</p>
     </div>
   </section>
 
@@ -952,6 +962,13 @@
           <div>
             <h4>Built for iOS</h4>
             <p>A native iOS experience designed with the same precision you expect from your instruments. Clean, fast, and intuitive.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-dot"></div>
+          <div>
+            <h4>Payments and Tax Forms</h4>
+            <p>Integrated in-app payments handle every transaction automatically, and year-end tax documents are generated for you when it's time to file.</p>
           </div>
         </div>
       </div>
@@ -1062,6 +1079,7 @@
       e.preventDefault();
       const email = document.getElementById('waitlistEmail').value.trim();
       const userType = document.getElementById('waitlistType').value;
+      const location = document.getElementById('waitlistLocation').value.trim();
       const submitBtn = document.getElementById('waitlistSubmit');
       const msg = document.getElementById('waitlistMessage');
 
@@ -1085,7 +1103,7 @@
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal',
           },
-          body: JSON.stringify({ email, user_type: userType }),
+          body: JSON.stringify({ email, user_type: userType, location }),
         });
 
         if (res.status === 201 || res.ok) {
